@@ -1,0 +1,65 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.mantrahealth.com/graphql
+name: Mantra Health API rate limits
+note: >-
+  Mantra Health publishes no rate-limit documentation — there is no developer portal or API reference
+  to document it in. These limits were read from RUNTIME RESPONSE HEADERS observed on live
+  unauthenticated requests to api.mantrahealth.com on 2026-08-25, which is the stronger signal for an
+  agent anyway. Both the host root (GET /) and the GraphQL endpoint (POST /graphql) return the same
+  X-RateLimit-* header family. The limit value and the reset epoch are real observed values; the
+  WINDOW LENGTH is not stated by the provider and is not asserted here.
+limit_count: 1
+limits:
+- id: api-host-default
+  scope: per-client
+  scope_note: >-
+    Observed on anonymous requests; the header is returned without any credential, so the counter is
+    keyed on the caller (IP or client) rather than on an API key or account. The provider does not
+    document the key, so the scope is recorded as observed, not as claimed.
+  limit: 35
+  unit: requests
+  window: unknown
+  window_note: >-
+    Not documented. X-RateLimit-Reset is a Unix epoch seconds value; successive probes returned
+    resets roughly a minute out, but the pipeline does not assert a window the provider never stated.
+  burst: null
+  applies_to:
+  - https://api.mantrahealth.com/
+  - https://api.mantrahealth.com/graphql
+  evidence:
+    observed: '2026-08-25'
+    url: https://api.mantrahealth.com/graphql
+    method: POST
+    http_status: 200
+    headers_seen:
+      x-ratelimit-limit: '35'
+      x-ratelimit-remaining: '34'
+      x-ratelimit-reset: '1787706486'
+response_headers:
+- name: X-RateLimit-Limit
+  observed: true
+  value_seen: '35'
+  description: Maximum requests permitted in the current window.
+- name: X-RateLimit-Remaining
+  observed: true
+  value_seen: '34'
+  description: Requests remaining in the current window; decremented per request.
+- name: X-RateLimit-Reset
+  observed: true
+  value_seen: '1787706486'
+  description: Unix epoch seconds at which the window resets. Not RFC 9331 `RateLimit` format.
+- name: Retry-After
+  observed: false
+  description: Not observed on any probed response. Exhaustion behaviour was not induced.
+exhaustion_status_code: unknown
+exhaustion_note: >-
+  Not determined. Deliberately exhausting a live healthcare provider's rate limit is out of bounds for
+  this pipeline, so the status code returned on exhaustion (conventionally 429) is recorded as unknown
+  rather than guessed.
+standards:
+  rfc_9331_ratelimit_headers: false
+  rfc_9331_note: >-
+    Uses the legacy X-RateLimit-* convention, not the standard RateLimit / RateLimit-Policy fields.
+docs: null
+docs_note: No published rate-limit documentation exists on any Mantra Health surface.

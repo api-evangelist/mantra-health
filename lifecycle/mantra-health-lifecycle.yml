@@ -1,0 +1,89 @@
+generated: '2026-08-25'
+method: searched
+source: https://mantrahealth.com/ + https://mantrahealth.statuspage.io/api/v2/summary.json
+name: Mantra Health API lifecycle
+status_page:
+  present: true
+  url: https://mantrahealth.statuspage.io/
+  provider: Atlassian Statuspage
+  page_id: j1qrgt400h6r
+  machine_readable: true
+  machine_readable_endpoints:
+  - https://mantrahealth.statuspage.io/api/v2/summary.json
+  - https://mantrahealth.statuspage.io/api/v2/components.json
+  http_status: 200
+  overall_indicator_at_probe: none
+  overall_description_at_probe: All Systems Operational
+  page_updated_at: '2024-03-31T08:00:02.444-04:00'
+  note: >-
+    A real, first-party Mantra Health status page (page name "Mantra Health", title
+    "Mantra Health Status"), with the standard Statuspage v2 JSON API available anonymously. Its
+    component list is the clearest public evidence Mantra operates an API and integration surface at
+    all — the company's own marketing site never mentions one. Note the page's updated_at timestamp
+    is 2024-03-31, so component state has not changed in some time; no incidents and no scheduled
+    maintenances were listed at probe.
+  components:
+  - name: API
+    status: operational
+  - name: API
+    status: operational
+    note: The summary lists two distinct components both named "API".
+  - name: Patient Portal
+    status: operational
+  - name: Management Portal
+    status: operational
+  - name: Provider Portal
+    status: operational
+  - name: 3rd Party Integrations
+    status: operational
+  - name: End User Experiences
+    status: operational
+  - name: Mantra Collaboration Portal
+    status: operational
+  - name: SSO
+    status: operational
+  - name: Services
+    status: operational
+  - name: Mantra Hub
+    status: operational
+versioning:
+  scheme: unknown
+  current_version: null
+  note: >-
+    No versioning policy is published. The API surface is GraphQL (api.mantrahealth.com/graphql),
+    which is conventionally unversioned and evolved additively, but Mantra states nothing about this
+    and no /v1/ style path responded on the API host.
+deprecation_policy:
+  present: false
+  url: null
+  sunset_header: not_observed
+  deprecation_header: not_observed
+  rfc_8594: false
+  note: >-
+    No deprecation or sunset policy is published, and neither the Sunset nor the Deprecation response
+    header (RFC 8594) was observed on any probed response from api.mantrahealth.com. No Deprecation
+    pointer is emitted.
+sla:
+  published: false
+  url: null
+  note: >-
+    No public SLA or uptime commitment. Any availability terms would live in the institutional
+    contract, which is not public. https://mantrahealth.com/terms-and-conditions/ is the website
+    terms of use, not an API SLA.
+changelog:
+  present: false
+  note: >-
+    No dated API or product changelog exists on any public surface. The status page reported zero
+    incidents and zero scheduled maintenances at probe, so it does not supply a change history
+    either. No ChangeLog pointer is emitted.
+deprecated_operations: []
+deprecated_operations_note: >-
+  Cannot be derived — there is no OpenAPI, and GraphQL introspection (which would expose @deprecated
+  directives) is disabled on the endpoint.
+evidence:
+- url: https://mantrahealth.statuspage.io/
+  status: 200
+- url: https://mantrahealth.statuspage.io/api/v2/summary.json
+  status: 200
+- url: https://mantrahealth.statuspage.io/api/v2/components.json
+  status: 200

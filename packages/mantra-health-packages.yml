@@ -1,0 +1,49 @@
+generated: '2026-08-25'
+method: searched
+source: npm registry search, PyPI, RubyGems, plus the Mantra Health site and GitHub organization
+name: Mantra Health client libraries
+note: >-
+  NO FIRST-PARTY SDK OR CLIENT LIBRARY EXISTS. This file records the negative search so a later run
+  does not repeat it. No `SDKs` and no `Packages` pointer is wired into apis.yml — emitting one would
+  credit Mantra with client libraries it does not publish.
+package_count: 0
+official_package_count: 0
+packages: []
+registries_searched:
+- registry: npm
+  query: mantrahealth
+  results: 0
+  url: https://registry.npmjs.org/-/v1/search?text=mantrahealth
+  note: No packages. A search for "mantra-health" returned only unrelated projects — the Mantra JS framework (mantra-core, mantra-cli), BitGo's MANTRA blockchain coin SDK, and generic "health" packages. None are Mantra Health, Inc.
+- registry: pypi
+  query: mantrahealth
+  results: 0
+  url: https://pypi.org/pypi/mantrahealth/json
+  http_status: 404
+- registry: pypi
+  query: mantra-health
+  results: 0
+  url: https://pypi.org/pypi/mantra-health/json
+  http_status: 404
+- registry: rubygems
+  query: mantra-health
+  results: 0
+  url: https://rubygems.org/api/v1/gems/mantra-health.json
+  http_status: 404
+- registry: github
+  query: org:mantrahealth
+  results: 0
+  url: https://api.github.com/orgs/mantrahealth/repos
+  http_status: 200
+  note: >-
+    The GitHub organization github.com/mantrahealth EXISTS (org id 48841301, page returns 200) but
+    publishes ZERO public repositories, so there is no source-distributed client either. The only
+    public repo matching the name network-wide is NouhaC/cimsirp-mantrahealth, a third-party
+    student/coursework repository, not a Mantra Health release.
+- registry: cdn
+  query: unpkg / jsDelivr
+  results: 0
+  note: No CDN-distributed Mantra Health client bundle was found; the site loads only Swiper from jsDelivr, a generic third-party carousel library.
+docs_note: >-
+  There is no SDK page to derive candidates from — Mantra Health publishes no developer portal,
+  documentation site, or SourceCode/SDK link anywhere on mantrahealth.com.

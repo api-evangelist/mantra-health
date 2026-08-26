@@ -1,0 +1,129 @@
+generated: '2026-08-25'
+method: probed
+source: live HTTP probes of every Mantra Health host, 2026-08-25
+name: Mantra Health well-known documents
+note: >-
+  No Mantra Health host serves any /.well-known/ document. Three distinct negative shapes were
+  observed and are recorded separately because they are different facts. api.mantrahealth.com
+  (the real API host, nginx behind Aptible) returns a genuine 404 with a short HTML error page for
+  every path. mantrahealth.com (WordPress) 301-redirects every /.well-known/ path to the site root,
+  which resolves 200 to the homepage — a soft-404, not a document. hub.mantrahealth.com and
+  app.mantrahealth.com are single-page apps (Expo/React and CRA) whose catch-all route answers 200
+  with the same HTML app shell for every path, including /.well-known/agent-card.json — the dominant
+  false positive this probe is designed to reject. No WellKnown or SecurityTxt pointer is emitted:
+  every path is an absence.
+hosts:
+- host: api.mantrahealth.com
+  note: First-party API host; hard 404s, no SPA catch-all.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: mantrahealth.com
+  note: >-
+    WordPress marketing site. Every /.well-known/ path returns 301 to https://mantrahealth.com/,
+    which serves the homepage with HTTP 200. Recorded as the redirect status; treated as a miss.
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 301
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 301
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 301
+    file: null
+  - path: /.well-known/api-catalog
+    status: 301
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 301
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 301
+    file: null
+  - path: /.well-known/agent.json
+    status: 301
+    file: null
+- host: hub.mantrahealth.com
+  note: >-
+    Expo / React Native Web SPA (student "Mantra Hub"). Serves an identical 1,417-byte HTML app shell
+    with HTTP 200 for every path probed, including paths that cannot exist. All 200s below are the
+    SPA shell, NOT documents, and are treated as misses.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: null
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+- host: app.mantrahealth.com
+  note: >-
+    Create-React-App SPA titled "Portal", served from Netlify. Same catch-all behaviour as
+    hub.mantrahealth.com; every 200 is the app shell, not a document.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+- host: mcp.mantrahealth.com
+  note: >-
+    NOT a Model Context Protocol server. "MCP" here is the Mantra Collaboration Portal — a Netlify
+    React SPA whose meta description reads "Provider portal for Mantra Health", matching the
+    "Mantra Collaboration Portal" component on the company status page. A POST of
+    {"jsonrpc":"2.0","method":"tools/list"} returns HTTP 404 with a Netlify "Page not found" page.
+    Recorded explicitly so a future run does not re-read this hostname as an agent surface.
+  documents:
+  - path: /
+    status: 200
+    file: null
+  - path: / (POST tools/list)
+    status: 404
+    file: null

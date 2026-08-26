@@ -1,0 +1,30 @@
+generated: '2026-08-25'
+method: searched
+source: https://mantrahealth.com/
+name: Mantra Health plans and pricing
+plan_count: 0
+note: >-
+  Mantra Health publishes no plans, tiers or prices of any kind. It sells institutional contracts to
+  colleges and universities through a sales motion, not a self-serve subscription: every commercial
+  call to action on the site is "Get in Touch" or "Get a quote", routed to
+  https://mantrahealth.com/get-in-touch/. There is no API pricing because there is no self-serve API
+  product — the API is reached through a campus contract. This is an honest zero, not an unchecked
+  field.
+pricing_page: null
+pricing_page_note: >-
+  https://mantrahealth.com/pricing/ does not exist: it returns HTTP 200 only after redirecting to
+  https://mantrahealth.com/ (the homepage), a soft-404. No /plans/ page exists either, and no pricing
+  page appears in the site's own page-sitemap.xml.
+sales_contact: https://mantrahealth.com/get-in-touch/
+billing_model: enterprise-contract
+evidence:
+- url: https://mantrahealth.com/pricing/
+  status: 200
+  note: Soft-404 — redirects to the homepage; no pricing content.
+- url: https://mantrahealth.com/page-sitemap.xml
+  status: 200
+  note: Full page inventory; contains no pricing, plans or developer page.
+- url: https://mantrahealth.com/get-in-touch/
+  status: 200
+  note: The actual commercial entry point.
+plans: []

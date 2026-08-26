@@ -1,0 +1,135 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.mantrahealth.com/graphql
+name: Mantra Health API conventions
+note: >-
+  Mantra Health publishes no API documentation, so none of this is documented convention — it is what
+  live anonymous probes observed on the wire on 2026-08-25, plus honest unknowns where the gated
+  GraphQL schema prevented observation. Nothing here is inferred from what a GraphQL API "usually"
+  does.
+api_style: graphql
+api_style_note: >-
+  Single POST endpoint at https://api.mantrahealth.com/graphql served by Apollo Server behind nginx
+  (Aptible). The host root answers 200 with the plain-text banner "Mantra Health API".
+authentication:
+  style: unknown
+  detail: See authentication/mantra-health-authentication.yml. No credential type could be established.
+  cross_ref: authentication/mantra-health-authentication.yml
+idempotency:
+  supported: unknown
+  header: null
+  scope: null
+  retention: null
+  note: >-
+    NOT DOCUMENTED and NOT OBSERVABLE. No Idempotency-Key or equivalent header is documented, and no
+    mutation could be reached to test one — every operation outside the allowed set is rejected before
+    execution. No `Idempotency` pointer is emitted in apis.yml: emitting one would assert a capability
+    that has not been shown to exist.
+pagination:
+  style: unknown
+  params: []
+  response_fields: []
+  note: >-
+    Unknown. GraphQL introspection is disabled, so it cannot be determined whether the schema uses
+    Relay cursor connections, offset arguments, or something else.
+field_selection:
+  supported: true
+  mechanism: graphql-selection-set
+  note: >-
+    Inherent to GraphQL — the caller names the fields it wants. This is a property of the query
+    language, not a documented Mantra Health feature.
+expansion:
+  supported: n/a
+  note: Not applicable to GraphQL; nested selection replaces REST-style expansion.
+metadata:
+  supported: unknown
+  note: Cannot be determined without the schema.
+request_tracing:
+  supported: true
+  header: X-Mantra-Request-Id
+  direction: response
+  format: uuid-v4
+  example_shape: 8-4-4-4-12 hexadecimal UUID
+  note: >-
+    OBSERVED on every response from api.mantrahealth.com, including the host root and the GraphQL
+    endpoint, and a distinct value is returned per request. This is a real, usable correlation
+    identifier for support escalation — the single most agent-useful runtime convention the API
+    exposes. It is undocumented; Mantra never tells a caller it exists.
+versioning:
+  scheme: unknown
+  in: null
+  note: >-
+    No version appears in the path, in a header, or in any documentation. No /v1/ path responded on
+    the API host. Cross-ref lifecycle/mantra-health-lifecycle.yml.
+error_envelope:
+  format: graphql-errors
+  content_type: application/json; charset=utf-8
+  shape: '{"errors":[{"message":"...","extensions":{"code":"..."}}]}'
+  codes_observed:
+  - code: GRAPHQL_VALIDATION_FAILED
+    http_status: 400
+    message: Invalid request.
+    note: >-
+      Returned identically for a valid introspection query and for a nonsense field name. The message
+      is deliberately generic and reveals nothing about the schema.
+  - code: INTERNAL_SERVER_ERROR
+    http_status: 200
+    message: An internal error occurred.
+    note: >-
+      Returned when an Apollo persisted-query extension is supplied with an unknown hash. The JSON
+      body nests extensions.exception with name InternalServerErrorException and httpStatus 500 while
+      the HTTP response itself is 200 — a mismatch worth noting for any client that branches on the
+      status code.
+  rfc9457: false
+  cross_ref: null
+  cross_ref_note: >-
+    No errors/ artifact is emitted. An error catalog would have to be derived from OpenAPI 4xx/5xx
+    responses or from a published error reference, and Mantra has neither; the two codes above are
+    recorded here rather than fabricated into a catalog.
+rate_limit_signaling:
+  supported: true
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  cross_ref: rate-limits/mantra-health-rate-limits.yml
+cors:
+  allow_credentials: true
+  note: access-control-allow-credentials returned true, consistent with browser sessions for the first-party portals.
+transport_security:
+  hsts: true
+  hsts_max_age_seconds: 31536000
+  hsts_include_subdomains: true
+  csp: true
+  csp_note: >-
+    api.mantrahealth.com returns a restrictive Content-Security-Policy with default-src 'self'
+    *.mantrahealth.com https://mantrahealth.zendesk.com and object-src 'none'.
+  other_headers:
+  - X-Frame-Options: DENY
+  - X-Content-Type-Options: nosniff
+  - X-DNS-Prefetch-Control: off
+  - X-Download-Options: noopen
+  - X-XSS-Protection: 1; mode=block
+  - Surrogate-Control: no-store
+  note: >-
+    An unusually complete security-header set for a host with no public documentation — evidence of a
+    deliberate hardening posture consistent with the HIPAA and SOC 2 claims.
+dry_run_mode:
+  supported: unknown
+  note: Cannot be determined; no schema and no documentation.
+reversibility:
+  grade: unknown
+  write_surface: unknown
+  reversal_operations: []
+  windows: []
+  docs: null
+  note: >-
+    HONEST UNKNOWN — deliberately not graded `na` and not graded `documented`. `na` would be wrong
+    because this is plainly not a read-only API: it backs a clinical product in which appointments
+    are booked and cancelled, referrals are made, and records are written, so a write surface
+    certainly exists. `documented` would be wrong because no reversal operation, and no window, has
+    been shown. GraphQL introspection is disabled, so no mutation name can be read; Mantra publishes
+    no documentation in which a cancel/refund/void/restore path or its window could be stated. No
+    window is asserted here, because inventing one for a healthcare scheduling surface is precisely
+    the error that could cost a user real money or a missed appointment. Establishing this requires
+    authenticated schema introspection or provider-published docs.

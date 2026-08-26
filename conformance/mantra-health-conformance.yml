@@ -1,0 +1,148 @@
+generated: '2026-08-25'
+method: searched
+source: https://mantrahealth.com/security-and-privacy/
+name: Mantra Health conformance and compliance
+note: >-
+  Compliance claims are taken verbatim from Mantra Health's own Security and Privacy page. Technical
+  API conformance could not be derived from a contract — there is no OpenAPI, and GraphQL
+  introspection is disabled — so every technical entry below is recorded as unknown with the reason,
+  rather than guessed from the product category.
+standards:
+- id: hipaa
+  name: Health Insurance Portability and Accountability Act
+  conforms: true
+  category: regulatory
+  evidence:
+    url: https://mantrahealth.com/security-and-privacy/
+    http_status: 200
+    quote: >-
+      "We adhere to the national standard for handling Protected Health Information (PHI) related to
+      student health records, medical research collaborations, and other university-related
+      healthcare data."
+  note: >-
+    Self-attested adherence, which is the normal form for HIPAA — it is a regulatory obligation for a
+    covered entity or business associate, not a certification issued by a body.
+- id: soc-2
+  name: SOC 2 (AICPA Trust Services Criteria)
+  conforms: true
+  category: audit
+  evidence:
+    url: https://mantrahealth.com/security-and-privacy/
+    http_status: 200
+    quote: >-
+      "Mantra has undergone a rigorous external audit, in which our security, availability, processing
+      integrity, confidentiality, and privacy controls have been assessed and approved."
+  note: >-
+    The page heading reads "SOC-I & SOC-II" and names all five Trust Services Criteria. The report
+    itself is not published; no report date, auditor or Type (I/II) is stated, and there is no trust
+    portal from which to request it.
+- id: soc-1
+  name: SOC 1 (SSAE 18 / ICFR)
+  conforms: true
+  category: audit
+  evidence:
+    url: https://mantrahealth.com/security-and-privacy/
+    http_status: 200
+    quote: '"SOC-I & SOC-II"'
+  note: Claimed in the same heading as SOC 2; no report, date or auditor published.
+- id: tx-ramp
+  name: Texas Risk and Authorization Management Program
+  conforms: partial
+  category: regulatory
+  evidence:
+    url: https://mantrahealth.com/security-and-privacy/
+    http_status: 200
+    quote: >-
+      "We're proactively committed to aligning with state-specific security requirements, including
+      the TX RMP security framework which is mandated for higher education institutions and state
+      agencies in Texas."
+  note: >-
+    Recorded as partial deliberately. Mantra claims "committed to aligning with", not a granted
+    TX-RAMP certification at a stated level, and no certification number or status is published. The
+    page also renders the program name as "TX RMP".
+- id: ferpa
+  name: Family Educational Rights and Privacy Act
+  conforms: unknown
+  category: regulatory
+  evidence: null
+  note: >-
+    Not claimed anywhere on the Security and Privacy page, despite the customer base being colleges
+    and universities and the data including student records. Recorded as unknown, not as absent —
+    it may be addressed in the institutional contract, which is not public.
+- id: oauth2
+  name: OAuth 2.0
+  conforms: unknown
+  category: technical
+  evidence: null
+  note: >-
+    The status page lists an "SSO" component, so a federated identity surface exists, but no
+    /.well-known/openid-configuration or /.well-known/oauth-authorization-server document is served
+    on any Mantra host (all probed: 404 on api.mantrahealth.com, 301-to-homepage on mantrahealth.com,
+    SPA shell on the portals). Nothing is asserted.
+- id: oidc
+  name: OpenID Connect
+  conforms: unknown
+  category: technical
+  evidence: null
+  note: Same as oauth2 — an SSO component exists but no discovery document is published.
+- id: rfc9457
+  name: 'RFC 9457: Problem Details for HTTP APIs'
+  conforms: false
+  category: technical
+  evidence:
+    url: https://api.mantrahealth.com/graphql
+    http_status: 400
+    quote: >-
+      Errors are returned in the GraphQL errors[] envelope with Apollo extensions.code values
+      (GRAPHQL_VALIDATION_FAILED, INTERNAL_SERVER_ERROR), served as application/json — not
+      application/problem+json.
+  note: Not a defect; a GraphQL API is not expected to use RFC 9457.
+- id: rfc9331
+  name: 'RFC 9331: RateLimit header fields'
+  conforms: false
+  category: technical
+  evidence:
+    url: https://api.mantrahealth.com/graphql
+    http_status: 200
+    quote: >-
+      Returns legacy X-RateLimit-Limit / X-RateLimit-Remaining / X-RateLimit-Reset rather than the
+      standard RateLimit and RateLimit-Policy fields.
+- id: rfc9116
+  name: 'RFC 9116: security.txt'
+  conforms: false
+  category: technical
+  evidence:
+    url: https://api.mantrahealth.com/.well-known/security.txt
+    http_status: 404
+  note: No security.txt is served on any Mantra Health host.
+domain_standards:
+- id: fhir
+  name: HL7 FHIR
+  conforms: unknown
+  evidence: null
+  note: >-
+    The obvious domain standard for this market, and the shortlist entry worth probing first for a
+    healthcare provider. NOT FOUND and NOT ASSERTED. Mantra runs a proprietary EHR (the Collaboration
+    Portal is described as an extension to it) and the status page lists a "3rd Party Integrations"
+    component, but no FHIR base URL, CapabilityStatement, /metadata endpoint or FHIR resource path
+    responded on api.mantrahealth.com, and the contract is GraphQL with introspection disabled, so
+    no resource shapes can be inspected. Absence of evidence only — reward-only dimension, so no
+    penalty is implied.
+- id: hl7v2
+  name: HL7 v2 messaging
+  conforms: unknown
+  evidence: null
+  note: Not discoverable from any public surface; campus EHR integration terms are not published.
+- id: smart-on-fhir
+  name: SMART on FHIR
+  conforms: unknown
+  evidence: null
+  note: >-
+    No .well-known/smart-configuration served on any host. Not asserted.
+evidence:
+- url: https://mantrahealth.com/security-and-privacy/
+  status: 200
+- url: https://api.mantrahealth.com/graphql
+  status: 400
+- url: https://api.mantrahealth.com/.well-known/openid-configuration
+  status: 404

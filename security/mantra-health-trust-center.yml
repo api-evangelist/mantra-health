@@ -1,0 +1,90 @@
+generated: '2026-08-25'
+method: searched
+source: https://mantrahealth.com/security-and-privacy/
+name: Mantra Health security and compliance
+note: >-
+  Mantra Health does not run a trust center in the modern sense — there is no trust.mantrahealth.com,
+  no Vanta/Drata/SafeBase portal, and no document request flow. What it publishes is a single
+  marketing-site page, "Security and Privacy at Mantra Health", naming three compliance frameworks in
+  prose. That page is the whole of the public posture, and it is recorded here verbatim. The
+  automated probe (probe-security-programs.py) missed it because the page sits at
+  /security-and-privacy/ rather than any of the conventional /trust, /security, /compliance paths;
+  /security does 302 to it, which is how it was found.
+trust_center:
+  present: partial
+  url: https://mantrahealth.com/security-and-privacy/
+  http_status: 200
+  type: marketing-page
+  portal: false
+  document_request_flow: false
+  document_request_note: >-
+    No mechanism to request a SOC report, questionnaire response or subprocessor list. The page's only
+    call to action is the generic "Get in Touch" sales form at https://mantrahealth.com/get-in-touch/.
+  subprocessors_published: false
+  pen_test_published: false
+  uptime_sla_published: false
+certifications:
+- name: HIPAA
+  status: self-attested
+  evidence_quote: >-
+    "We adhere to the national standard for handling Protected Health Information (PHI) related to
+    student health records, medical research collaborations, and other university-related healthcare
+    data."
+  certificate_published: false
+  date: null
+- name: SOC 2
+  status: claimed-audited
+  evidence_quote: >-
+    "Mantra has undergone a rigorous external audit, in which our security, availability, processing
+    integrity, confidentiality, and privacy controls have been assessed and approved."
+  certificate_published: false
+  auditor: null
+  report_type: null
+  report_type_note: The page does not state whether the report is Type I or Type II, nor its period.
+  date: null
+- name: SOC 1
+  status: claimed-audited
+  evidence_quote: '"SOC-I & SOC-II" (page heading)'
+  certificate_published: false
+  date: null
+- name: TX-RAMP
+  status: claimed-aligned
+  evidence_quote: >-
+    "We're proactively committed to aligning with state-specific security requirements, including the
+    TX RMP security framework which is mandated for higher education institutions and state agencies
+    in Texas."
+  certificate_published: false
+  note: >-
+    Stated as alignment/commitment, not as a granted certification at a level. No TX-RAMP
+    certification number or status is published.
+  date: null
+not_claimed:
+- name: ISO 27001
+  note: Not mentioned anywhere on the page or site.
+- name: HITRUST CSF
+  note: >-
+    Not mentioned. Notable only because HITRUST is the common companion certification for a HIPAA
+    covered entity or business associate at this size; its absence is recorded, not judged.
+- name: FERPA
+  note: >-
+    Not mentioned, despite student education records being squarely in scope for a vendor to colleges
+    and universities.
+- name: FedRAMP
+  note: Not mentioned.
+- name: PCI DSS
+  note: Not mentioned; no evidence Mantra handles cardholder data (it bills institutions, not students).
+observed_technical_posture:
+  note: >-
+    Independently probed, and corroborating the compliance claims: api.mantrahealth.com returns HSTS
+    (max-age 31536000, includeSubDomains), a restrictive Content-Security-Policy, X-Frame-Options
+    DENY, X-Content-Type-Options nosniff, X-XSS-Protection, X-Download-Options and
+    Surrogate-Control no-store. The registrable domain publishes SPF and a DMARC policy of p=reject.
+    DNSSEC is not enabled and no CAA record is published. See
+    security/mantra-health-domain-security.yml.
+  cross_ref: security/mantra-health-domain-security.yml
+evidence:
+- url: https://mantrahealth.com/security-and-privacy/
+  status: 200
+- url: https://mantrahealth.com/security
+  status: 200
+  note: 302 to /security-and-privacy/.

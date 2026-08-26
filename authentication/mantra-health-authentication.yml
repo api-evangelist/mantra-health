@@ -1,0 +1,85 @@
+generated: '2026-08-25'
+method: probed
+source: https://api.mantrahealth.com/graphql
+name: Mantra Health API authentication
+note: >-
+  DERIVATION WAS NOT POSSIBLE and nothing has been invented. There is no OpenAPI to read
+  securitySchemes from, GraphQL introspection is disabled, and Mantra publishes no authentication
+  documentation because it publishes no developer portal at all. Everything below is what live
+  anonymous probes actually observed on 2026-08-25.
+documented: false
+docs: null
+docs_note: >-
+  No auth page exists. Mantra Health has no developer portal, API reference, getting-started guide or
+  public API documentation on any host; the site's own page-sitemap.xml lists no developer page.
+schemes:
+- id: unknown-bearer-or-session
+  type: unknown
+  in: unknown
+  observed: false
+  note: >-
+    The credential type could not be established. The GraphQL endpoint accepts anonymous POSTs and
+    returns a well-formed GraphQL response for the meta field {__typename} (-> "Query") without any
+    credential, so it does not challenge unauthenticated callers at the transport layer. It returns
+    no WWW-Authenticate header. Every non-meta query is rejected before execution with a generic
+    validation error, so no authenticated field was ever reached and no auth mechanism was exercised.
+observed_behaviour:
+  anonymous_reachable: true
+  anonymous_reachable_note: >-
+    POST https://api.mantrahealth.com/graphql with Content-Type application/json and
+    {"query":"{__typename}"} returns HTTP 200 {"data":{"__typename":"Query"}}.
+  www_authenticate_header: not_present
+  introspection: disabled
+  introspection_note: >-
+    A full introspection query and any unknown field both return HTTP 400
+    {"errors":[{"message":"Invalid request.","extensions":{"code":"GRAPHQL_VALIDATION_FAILED"}}]}.
+    The response is identical for a syntactically valid introspection query and for a nonsense field,
+    so the server is not merely hiding the schema — it appears to reject any operation outside an
+    allowed set. Consistent with an Apollo persisted-query / operation-safelist posture, but Mantra
+    documents nothing, so this is recorded as an observation, not a conclusion.
+  csrf_prevention: true
+  csrf_prevention_note: >-
+    Apollo Server CSRF prevention is enabled. A GET or a request without a JSON content-type returns
+    HTTP 400 with "This operation has been blocked as a potential Cross-Site Request Forgery (CSRF).
+    Please either specify a 'content-type' header ... or provide a non-empty value for one of the
+    following headers: x-apollo-operation-name, apollo-require-preflight".
+  cors_credentials: true
+  cors_credentials_note: >-
+    Response carries access-control-allow-credentials true, implying cookie/session-based browser auth
+    for the first-party portals.
+sso:
+  present: true
+  evidence:
+    url: https://mantrahealth.statuspage.io/api/v2/summary.json
+    http_status: 200
+    quote: The status page lists an "SSO" component (operational).
+  protocol: unknown
+  note: >-
+    Campus single sign-on is operationally real — it has its own status component — but the protocol
+    is not published, and no OIDC or OAuth discovery document is served on any Mantra host. SAML is
+    the common choice in higher education; it is NOT asserted here because nothing observed confirms it.
+discovery_documents_probed:
+- url: https://api.mantrahealth.com/.well-known/openid-configuration
+  status: 404
+- url: https://api.mantrahealth.com/.well-known/oauth-authorization-server
+  status: 404
+- url: https://api.mantrahealth.com/.well-known/oauth-protected-resource
+  status: 404
+- url: https://mantrahealth.com/.well-known/openid-configuration
+  status: 301
+  note: Redirects to the homepage (soft-404).
+scopes:
+  present: unknown
+  note: >-
+    No scopes artifact is emitted. scopes/ is OAuth-only, and no OAuth 2.0 surface could be confirmed;
+    forcing an empty scope list would assert a model that has not been observed.
+evidence:
+- url: https://api.mantrahealth.com/graphql
+  status: 200
+  note: Anonymous {__typename} succeeds.
+- url: https://api.mantrahealth.com/graphql
+  status: 400
+  note: Introspection and unknown fields rejected with GRAPHQL_VALIDATION_FAILED.
+- url: https://api.mantrahealth.com/
+  status: 200
+  note: Plain-text banner "Mantra Health API".
