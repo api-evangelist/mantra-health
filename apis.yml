@@ -12,6 +12,17 @@ description: >-
   the patient, provider, management and collaboration portals. Mantra publishes no public developer
   portal, API reference, SDK or machine-readable specification; the API is a customer/product surface
   reached through the campus contract rather than a self-serve developer program.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://i0.wp.com/mantrahealth.com/wp-content/uploads/2023/12/cropped-Mantra-Favicon.png?fit=192%2C192&ssl=1
 url: https://raw.githubusercontent.com/api-evangelist/mantra-health/refs/heads/main/apis.yml
 x-type: company
