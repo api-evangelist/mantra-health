@@ -90,21 +90,20 @@ apis:
     url: authentication/mantra-health-authentication.yml
   - type: Conventions
     url: conventions/mantra-health-conventions.yml
-- aid: mantra-health:mantra-health-wordpress-content-api
-  name: Mantra Health WordPress Content API
-  description: The WordPress REST API behind the mantrahealth.com marketing and resource site, served
-    unauthenticated at /wp-json/. This is the content management surface for the public website (posts,
-    pages, resources, solutions, testimonials, people) and is not the Mantra Health clinical product API.
-    The discovery document is real and machine-readable and self-describes its routes, namespaces and
-    supported methods; namespaces observed include wp/v2, oembed/1.0, yoast/v1, jetpack/v4, wpcomsh/v1,
-    akismet/v1, wp-block-editor/v1 and redirection/v1. Recorded because it is a genuine public machine-readable
-    API on the company's own domain, and labelled so no reader mistakes it for a product API.
-  humanURL: https://mantrahealth.com/resources/
-  baseURL: https://mantrahealth.com/wp-json/
+- aid: mantra-health:mantrahealth-com-website-wordpress-rest
+  name: Mantra Health Website (WordPress REST)
+  description: 'The public WordPress REST API (wp-json) of the Mantra Health website at mantrahealth.com:
+    the route index of the site''s content management system, catalogued as one site surface rather than
+    as separate APIs.'
+  baseURL: https://mantrahealth.com/wp-json
   tags:
-  - Content
   - WordPress
-  - CMS
+  x-surface: platform-generated
+  properties:
+  - type: Documentation
+    url: https://mantrahealth.com/wp-json
+  x-platform: wordpress
+  x-platform-surface: rest
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
